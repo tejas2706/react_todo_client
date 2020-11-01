@@ -1,0 +1,47 @@
+.home__container{
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px dotted green; */
+}
+
+.home__innerContainer{
+    padding: 10px;
+    width: 70%;
+    border: 1px solid rgb(206, 202, 202);
+    background-color:rgb(240, 240, 240);
+    border-radius: 5px;
+}
+
+.home__header {
+    width: 100%;
+    /* border: 1px solid black; */
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home__createNewButton {
+    font-size: large;
+    cursor: pointer;
+}
+
+.home__accountDetails{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.home__avatar{
+    margin: 5px;
+}
+
+.home__tablehead{
+    background-color: rgb(220, 220, 220);
+}

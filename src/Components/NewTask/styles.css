@@ -1,0 +1,55 @@
+.newtask__title {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.newtask__container{
+    border: 1px solid black;
+    /* width: 50%; */
+    min-width: 30%;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: rgb(240, 240, 240);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.newtask__form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    margin: 10px;
+    /* border: 1px solid green; */
+}
+
+.newtask__formLabel{
+    border: 1px solid black;
+    justify-content: space-between;
+    border-radius: 5px;
+    margin: 5px;
+    height: 30px;
+    width: 100%;
+    font-size: large;
+}
+
+.newtask__formLabelDescription {
+    border: 1px solid black;
+    justify-content: space-between;
+    border-radius: 5px;
+    margin: 5px;
+    height: 50px;
+    width: 100%;
+    font-size: large;
+}
+
+.newtask__submit{
+    background-color: rgb(0, 0, 0);
+    font-size: x-large;
+    margin: 20px 10px 10px 10px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
