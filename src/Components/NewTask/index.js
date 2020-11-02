@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import { newTask } from '../../redux';
-import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 import './styles.css';
-
+import { apiPrefix } from '../../config';
 
 class NewTask extends Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             title: "",
             description: "",
             priority: "",
-            // ETA:""
         }
     }
 
@@ -22,6 +20,25 @@ class NewTask extends Component {
         console.log(this.state)
     }
 
+    addnewTask = async() => {
+        let res = await fetch(`${apiPrefix}/todo`,{
+            method:"POST",
+            headers:{
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body:{
+                ...this.state,
+                date:new Date()
+            }
+        })
+
+        let result = res.json()
+        if(result && result.success){
+            this.props.history.push("/home");
+        }
+    }
 
     render() {
         return (
@@ -66,7 +83,7 @@ class NewTask extends Component {
                             className="newtask__formLabel"></input>
                         </label> */}
                         <div>
-                            <button value="submit" className="newtask__submit" onClick={() => this.props.addnewTask(this.state)}>Submit</button>
+                            <button value="submit" className="newtask__submit" onClick={() => this.addnewTask()}>Submit</button>
                             <button value="cancel" className="newtask__submit" onClick={() => this.props.cancel()}>Cancel</button>
                         </div>
                     </form>
@@ -77,10 +94,4 @@ class NewTask extends Component {
 }
 
 
-const mapDispatchToProps = dispatch =>{
-    return {
-        addnewTask : (task) => dispatch(newTask(task))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(NewTask)
+export default withRouter(NewTask)

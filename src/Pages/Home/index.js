@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,12 +9,14 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import NewTask from '../../Components/NewTask';
 import './styles.css';
-import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { apiPrefix } from '../../config';
+import * as _ from 'lodash';
 
 class Home extends Component {
 
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 		this.state = {
 			todos: [
 				{
@@ -47,6 +48,34 @@ class Home extends Component {
 		}
 	}
 
+	async componentDidMount (){
+        try{
+			const token = localStorage.getItem("token");
+            console.log("Home -> componentDidMount -> token", token)
+			if(!token){
+				this.props.history.push('/login')
+			}
+
+            let res = await fetch(`${apiPrefix}/todos`, {
+                method:'GET',
+                headers:{
+                    'Accept': 'application/json',
+					'Content-type': 'application/json',
+					'Authorization': token
+                }
+            });
+
+            let result  =  res.json();
+
+            if(!_.isEmpty(result)){
+				this.setState({todos:result});
+            }
+
+        }catch(error){
+	        console.log("Home -> componentDidMount -> error", error)
+        }
+    }
+
 	createNew = () => {
 		this.setState({"createNew":true})
 	}
@@ -75,6 +104,12 @@ class Home extends Component {
 							</div>
 
 						</div>
+						{!this.state.todos.length ? 
+						
+						<h3>No Todos, create new to add todos.</h3>
+						
+						:
+
 						<TableContainer component={Paper}>
 							<Table size="small" aria-label="a dense table">
 								<TableHead className="home__tablehead">
@@ -87,7 +122,7 @@ class Home extends Component {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{this.props.todos.map((row, index) => (
+									{this.state.todos.map((row, index) => (
 										<TableRow key={row.title}>
 											<TableCell component="th" scope="row">{index + 1}</TableCell>
 											<TableCell align="center">{row.title}</TableCell>
@@ -99,6 +134,7 @@ class Home extends Component {
 								</TableBody>
 							</Table>
 						</TableContainer>
+					}
 					</div>
 				}
 			</div>
@@ -106,11 +142,5 @@ class Home extends Component {
 	}
 }
 
-const mapStateToProps = state => {
-	console.log("-------------state", state)
-	return {
-			todos:state.todos
-	}
-}
 
-export default connect(mapStateToProps)(Home);
+export default withRouter(Home);
