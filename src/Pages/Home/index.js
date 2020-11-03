@@ -19,32 +19,33 @@ class Home extends Component {
 		super(props)
 		this.state = {
 			todos: [
-				{
-					"title": "todo1",
-					"description": "Description of todo1",
-					"priority": 1,
-					"ETA": "23/04/2020"
-				},
-				{
-					"title": "todo2",
-					"description": "Description of todo1",
-					"priority": 1,
-					"ETA": "23/04/2020"
-				},
-				{
-					"title": "todo3",
-					"description": "Description of todo1",
-					"priority": 1,
-					"ETA": "23/04/2020"
-				},
-				{
-					"title": "todo4",
-					"description": "Description of todo1",
-					"priority": 1,
-					"ETA": "23/04/2020"
-				}
+				// {
+				// 	"title": "todo1",
+				// 	"description": "Description of todo1",
+				// 	"priority": 1,
+				// 	"ETA": "23/04/2020"
+				// },
+				// {
+				// 	"title": "todo2",
+				// 	"description": "Description of todo1",
+				// 	"priority": 1,
+				// 	"ETA": "23/04/2020"
+				// },
+				// {
+				// 	"title": "todo3",
+				// 	"description": "Description of todo1",
+				// 	"priority": 1,
+				// 	"ETA": "23/04/2020"
+				// },
+				// {
+				// 	"title": "todo4",
+				// 	"description": "Description of todo1",
+				// 	"priority": 1,
+				// 	"ETA": "23/04/2020"
+				// }
 			],
-			createNew:false
+			createNew:false,
+			loading:true
 		}
 	}
 
@@ -60,7 +61,7 @@ class Home extends Component {
                 method:'GET',
                 headers:{
                     'Accept': 'application/json',
-					'Content-type': 'application/json',
+					'Content-Type': 'application/json',
 					'Authorization': token
                 }
             });
@@ -68,7 +69,7 @@ class Home extends Component {
             let result  =  res.json();
 
             if(!_.isEmpty(result)){
-				this.setState({todos:result});
+				this.setState({todos:result, loading:false});
             }
 
         }catch(error){
@@ -82,6 +83,35 @@ class Home extends Component {
 
 	cancel = () => {
 		this.setState({"createNew":false})
+	}
+
+	deleteTodo = async (id) => {
+		try{
+
+            let res = await fetch(`${apiPrefix}/todo/:${id}`, {
+                method:'DELETE',
+                headers:{
+                    'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'Authorization': localStorage.getItem("token")
+                }
+            });
+
+            let result  =  res.json();
+
+            if(!_.isEmpty(result)){
+				this.setState({loading:true});
+            }
+
+        }catch(error){
+	        console.log("Home -> componentDidMount -> error", error)
+        }
+	}
+
+	logout = () => {
+		console.log("------")
+		localStorage.clear()
+		this.props.history.push('/')
 	}
 
 	render() {
@@ -99,6 +129,7 @@ class Home extends Component {
 									className="home__avatar"
 									alt='Tejas'
 									src="./images"
+									onClick={()=>this.logout}
 								/>
 								<h3>Tejas</h3>
 							</div>
@@ -119,16 +150,18 @@ class Home extends Component {
 										<TableCell align="center">Description&nbsp;</TableCell>
 										<TableCell align="center">Priority&nbsp;</TableCell>
 										<TableCell align="center">Date&nbsp;</TableCell>
+										<TableCell align="center">Action&nbsp;</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
 									{this.state.todos.map((row, index) => (
-										<TableRow key={row.title}>
+										<TableRow key={row._id}>
 											<TableCell component="th" scope="row">{index + 1}</TableCell>
 											<TableCell align="center">{row.title}</TableCell>
 											<TableCell align="center">{row.description}</TableCell>
 											<TableCell align="center">{row.priority}</TableCell>
 											<TableCell align="center">{row.ETA}</TableCell>
+											<TableCell align="center"><button onClick={()=>this.deleteTodo(row._id)}>Delete</button></TableCell>
 										</TableRow>
 									))}
 								</TableBody>

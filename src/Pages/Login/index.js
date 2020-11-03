@@ -10,7 +10,7 @@ class Login extends Component {
         this.state = {
             details : {
                 name: "",
-                email: "",
+                username: "",
                 password: "",
             },
             selectedOption:"login"
@@ -33,6 +33,9 @@ class Login extends Component {
     onChange = (event) => {
         console.log("Login -> onChange -> event.target.value", event.target.value)
         event.preventDefault()
+        if(event.target.value.length > 12){
+            return;
+        }
         this.setState((prevstate)=>({
             details:{
                 ...prevstate.details,
@@ -47,19 +50,19 @@ class Login extends Component {
 
     loginSignUp = async () =>{
         try{
-
             let res = await fetch(`${apiPrefix}/${this.state.selectedOption}`, {
                 method:'POST',
                 headers:{
                     'Accept': 'application/json',
-                    'Content-type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body:{
+                body:JSON.stringify({
                     ...this.state.details
-                }
+                })
             });
 
-            let result  =  res.json();
+            let result  =  await res.json();
+            console.log("Login ->------------ result", result)
 
             if(result && result.token){
                 localStorage.setItem("token",result.token);
@@ -68,11 +71,11 @@ class Login extends Component {
                 this.setState({
                     details:
                         {
-                            name:"",
-                            email:"",
+                            username:"",
                             password:""
                     }
                 })
+                alert(result.msg);
             }
 
         }catch(error){
@@ -80,8 +83,7 @@ class Login extends Component {
             this.setState({
                 details:
                     {
-                        name:"",
-                        email:"",
+                        username:"",
                         password:""
                 }
             })
@@ -102,12 +104,12 @@ class Login extends Component {
                         <div>
                             <form className="login__form">
                                 <label>
-                                    <h2>Email :</h2>
+                                    <h2>Username :</h2>
                                     <input
                                         required
-                                        type="email"
-                                        name="email"
-                                        value={this.state.details.email}
+                                        type="text"
+                                        name="username"
+                                        value={this.state.details.username}
                                         onChange={this.onChange}
                                         className="login__formLabel"></input>
                                 </label>
@@ -137,18 +139,18 @@ class Login extends Component {
                                     <input
                                         required
                                         type="text"
-                                        name="text"
+                                        name="name"
                                         value={this.state.details.name}
                                         onChange={this.onChange}
                                         className="login__formLabel"></input>
                                 </label>
                                 <label>
-                                    <h2>Email :</h2>
+                                    <h2>Username :</h2>
                                     <input
                                         required
-                                        type="email"
-                                        name="email"
-                                        value={this.state.details.email}
+                                        type="text"
+                                        name="username"
+                                        value={this.state.details.username}
                                         onChange={this.onChange}
                                         className="login__formLabel"></input>
                                 </label>

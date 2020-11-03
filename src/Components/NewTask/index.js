@@ -25,7 +25,7 @@ class NewTask extends Component {
             method:"POST",
             headers:{
                 'Accept': 'application/json',
-                'Content-type': 'application/json',
+                'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('token')
             },
             body:{
