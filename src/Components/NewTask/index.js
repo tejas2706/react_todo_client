@@ -28,10 +28,10 @@ class NewTask extends Component {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('token')
             },
-            body:{
+            body:JSON.stringify({
                 ...this.state,
                 date:new Date()
-            }
+            })
         })
 
         let result = res.json()
