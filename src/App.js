@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  HashRouter
 } from "react-router-dom";
 
 import NewTask from './Components/NewTask';
@@ -12,11 +13,11 @@ import Login from './Pages/Login';
 
 function App() {
   return (
-      <Router basename={process.env.PUBLIC_URL}>
+      <HashRouter basename='/'>
           <Route exact path="/"><Login /></Route>
           <Route path="/login"><Login /></Route>
           <Route path="/home"><Home /></Route>
-      </Router>
+      </HashRouter>
   );
 }
 
