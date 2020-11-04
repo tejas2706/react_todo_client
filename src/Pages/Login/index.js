@@ -30,9 +30,7 @@ class Login extends Component {
     }
 
 
-    onChange = (event) => {
-        console.log("Login -> onChange -> event.target.value", event.target.value)
-        event.preventDefault()
+    handleChange = (event) => {
         if(event.target.value.length > 12){
             return;
         }
@@ -48,7 +46,8 @@ class Login extends Component {
         event !== this.state.selectedOption ? this.setState({selectedOption:event}) : console.log("Already selected")
     }
 
-    loginSignUp = async () =>{
+    submit = async (event) =>{
+        event.preventDefault();
         try{
             let res = await fetch(`${apiPrefix}/${this.state.selectedOption}`, {
                 method:'POST',
@@ -102,7 +101,7 @@ class Login extends Component {
                     <div>
                         <h3 className="login__title">Login</h3>
                         <div>
-                            <form className="login__form">
+                            <form className="login__form" onSubmit={this.submit}>
                                 <label>
                                     <h2>Username :</h2>
                                     <input
@@ -110,7 +109,7 @@ class Login extends Component {
                                         type="text"
                                         name="username"
                                         value={this.state.details.username}
-                                        onChange={this.onChange}
+                                        onChange={this.handleChange}
                                         className="login__formLabel"></input>
                                 </label>
                                 <label>
@@ -120,11 +119,12 @@ class Login extends Component {
                                         type="password"
                                         name="password"
                                         value={this.state.details.password}
-                                        onChange={this.onChange}
+                                        onChange={this.handleChange}
                                         className="login__formLabel"></input>
                                 </label>
                                 <div>
-                                    <button value="submit" className="login__submit" onClick={() => this.loginSignUp()}>Login</button>
+                                    <button className="login__submit">Login</button>
+                                    {/* <button value="submit" className="login__submit" onClick={() => this.loginSignUp()}>Login</button> */}
                                 </div>
                             </form>
                         </div>
@@ -133,7 +133,7 @@ class Login extends Component {
                     <div>
                         <h3 className="login__title">Sign Up</h3>
                         <div>
-                            <form className="login__form">
+                            <form className="login__form" onSubmit={this.submit}>
                                 <label>
                                     <h2>Name :</h2>
                                     <input
@@ -141,7 +141,7 @@ class Login extends Component {
                                         type="text"
                                         name="name"
                                         value={this.state.details.name}
-                                        onChange={this.onChange}
+                                        onChange={this.handleChange}
                                         className="login__formLabel"></input>
                                 </label>
                                 <label>
@@ -151,7 +151,7 @@ class Login extends Component {
                                         type="text"
                                         name="username"
                                         value={this.state.details.username}
-                                        onChange={this.onChange}
+                                        onChange={this.handleChange}
                                         className="login__formLabel"></input>
                                 </label>
                                 <label>
@@ -161,11 +161,11 @@ class Login extends Component {
                                         type="password"
                                         name="password"
                                         value={this.state.details.password}
-                                        onChange={this.onChange}
+                                        onChange={this.handleChange}
                                         className="login__formLabel"></input>
                                 </label>
                                 <div>
-                                    <button value="submit" className="login__submit" onClick={() => this.loginSignUp()}>Sign Up</button>
+                                    <button className="login__submit">Login</button>
                                 </div>
                             </form>
                         </div>

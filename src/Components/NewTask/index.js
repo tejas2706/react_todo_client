@@ -20,7 +20,8 @@ class NewTask extends Component {
         console.log(this.state)
     }
 
-    addnewTask = async() => {
+    addnewTask = async(event) => {
+        event.preventDefault();
         let res = await fetch(`${apiPrefix}/todo`,{
             method:"POST",
             headers:{
@@ -30,13 +31,13 @@ class NewTask extends Component {
             },
             body:JSON.stringify({
                 ...this.state,
-                date:new Date()
+                date:new Date().toLocaleString()
             })
         })
 
-        let result = res.json()
-        if(result && result.success){
-            this.props.history.push("/home");
+        let result = await res.json()
+        if(result && result._id){
+            this.props.cancel()
         }
     }
 
@@ -45,7 +46,7 @@ class NewTask extends Component {
             <div className="newtask__container">
                 <h3 className="newtask__title">Create Task</h3>
                 <div>
-                    <form className="newtask__form">
+                    <form className="newtask__form" onSubmit={this.addnewTask}>
                         <label>
                             <h3>Title :</h3>
                             <input
@@ -83,7 +84,7 @@ class NewTask extends Component {
                             className="newtask__formLabel"></input>
                         </label> */}
                         <div>
-                            <button value="submit" className="newtask__submit" onClick={() => this.addnewTask()}>Submit</button>
+                            <button className="newtask__submit">Submit</button>
                             <button value="cancel" className="newtask__submit" onClick={() => this.props.cancel()}>Cancel</button>
                         </div>
                     </form>

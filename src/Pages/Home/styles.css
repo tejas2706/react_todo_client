@@ -32,9 +32,18 @@
 
 .home__accountDetails{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+}
+
+.home__logout{
+    color: blue;
+    text-decoration: underline;
+}
+
+.home__delBtn{
     cursor: pointer;
 }
 

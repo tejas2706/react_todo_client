@@ -18,39 +18,18 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			todos: [
-				// {
-				// 	"title": "todo1",
-				// 	"description": "Description of todo1",
-				// 	"priority": 1,
-				// 	"ETA": "23/04/2020"
-				// },
-				// {
-				// 	"title": "todo2",
-				// 	"description": "Description of todo1",
-				// 	"priority": 1,
-				// 	"ETA": "23/04/2020"
-				// },
-				// {
-				// 	"title": "todo3",
-				// 	"description": "Description of todo1",
-				// 	"priority": 1,
-				// 	"ETA": "23/04/2020"
-				// },
-				// {
-				// 	"title": "todo4",
-				// 	"description": "Description of todo1",
-				// 	"priority": 1,
-				// 	"ETA": "23/04/2020"
-				// }
-			],
+			todos: [],
 			createNew:false,
 			loading:true
 		}
 	}
 
 	async componentDidMount (){
-        try{
+        this.getTodos()
+	}
+
+	async getTodos(){
+		try{
 			const token = localStorage.getItem("token");
             console.log("Home -> componentDidMount -> token", token)
 			if(!token){
@@ -66,16 +45,16 @@ class Home extends Component {
                 }
             });
 
-            let result  =  res.json();
+            let result  = await res.json();
 
             if(!_.isEmpty(result)){
 				this.setState({todos:result, loading:false});
             }
 
         }catch(error){
-	        console.log("Home -> componentDidMount -> error", error)
+	        console.log("Home -> getTodos -> error", error)
         }
-    }
+	}
 
 	createNew = () => {
 		this.setState({"createNew":true})
@@ -88,7 +67,7 @@ class Home extends Component {
 	deleteTodo = async (id) => {
 		try{
 
-            let res = await fetch(`${apiPrefix}/todo/:${id}`, {
+            let res = await fetch(`${apiPrefix}/todo/${id}`, {
                 method:'DELETE',
                 headers:{
                     'Accept': 'application/json',
@@ -97,10 +76,10 @@ class Home extends Component {
                 }
             });
 
-            let result  =  res.json();
+            let result  = await res.json();
 
             if(!_.isEmpty(result)){
-				this.setState({loading:true});
+				this.setState({loading:true})
             }
 
         }catch(error){
@@ -109,7 +88,6 @@ class Home extends Component {
 	}
 
 	logout = () => {
-		console.log("------")
 		localStorage.clear()
 		this.props.history.push('/login')
 	}
@@ -127,11 +105,9 @@ class Home extends Component {
 							<div className="home__accountDetails">
 								<Avatar
 									className="home__avatar"
-									alt='Tejas'
-									src="./images"
 									onClick={()=>this.logout}
 								/>
-								<h3>Tejas</h3>
+								<h3 className="home__logout" onClick={this.logout}>Logout</h3>
 							</div>
 
 						</div>
@@ -160,8 +136,8 @@ class Home extends Component {
 											<TableCell align="center">{row.title}</TableCell>
 											<TableCell align="center">{row.description}</TableCell>
 											<TableCell align="center">{row.priority}</TableCell>
-											<TableCell align="center">{row.ETA}</TableCell>
-											<TableCell align="center"><button onClick={()=>this.deleteTodo(row._id)}>Delete</button></TableCell>
+											<TableCell align="center">{row.date}</TableCell>
+											<TableCell align="center"><button className="home__delBtn" onClick={()=>this.deleteTodo(row._id)}>Delete</button></TableCell>
 										</TableRow>
 									))}
 								</TableBody>
