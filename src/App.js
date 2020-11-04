@@ -12,12 +12,10 @@ import Login from './Pages/Login';
 
 function App() {
   return (
-      <Router>
-        <div className="App">
+      <Router basename="/">
           <Route exact path="/"><Login /></Route>
           <Route path="/login"><Login /></Route>
           <Route path="/home"><Home /></Route>
-        </div>
       </Router>
   );
 }
