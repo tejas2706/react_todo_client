@@ -1,3 +1,3 @@
 module.exports = {
-    apiPrefix: 'http://localhost:8000'
+    apiPrefix: process.env.API_PREFIX || 'http://localhost:8000'
 }
