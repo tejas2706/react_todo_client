@@ -12,7 +12,7 @@ import Login from './Pages/Login';
 
 function App() {
   return (
-      <Router basename="/">
+      <Router basename={process.env.PUBLIC_URL}>
           <Route exact path="/"><Login /></Route>
           <Route path="/login"><Login /></Route>
           <Route path="/home"><Home /></Route>
