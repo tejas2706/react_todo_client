@@ -24,14 +24,20 @@ class Home extends Component {
 		}
 	}
 
-	async componentDidMount (){
+	componentDidMount (){
         this.getTodos()
+	}
+
+	componentDidUpdate(prevprops,prevstate, snapshot){
+		if(this.state.loading){
+			this.getTodos()
+			this.setState({loading:false})
+		}
 	}
 
 	async getTodos(){
 		try{
 			const token = localStorage.getItem("token");
-            console.log("Home -> componentDidMount -> token", token)
 			if(!token){
 				this.props.history.push('/login')
 			}
@@ -48,7 +54,7 @@ class Home extends Component {
             let result  = await res.json();
 
             if(!_.isEmpty(result)){
-				this.setState({todos:result, loading:false});
+				this.setState({todos:result});
             }
 
         }catch(error){
@@ -61,7 +67,7 @@ class Home extends Component {
 	}
 
 	cancel = () => {
-		this.setState({"createNew":false})
+		this.setState({"createNew":false, loading:true})
 	}
 
 	deleteTodo = async (id) => {
